@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>คำนวณคะแนนถ่วงน้ำหนัก</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.png" type="image/png" />
+  <meta name="theme-color" content="#2f855a" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
+</head>
+<body>
+  <h2>โปรแกรมคำนวณคะแนนถ่วงน้ำหนัก (PWA)</h2>
+  <form id="scoreForm">
+    <table>
+      <tr><td>คณิต</td><td><input type="number" name="weight" step="0.01" value="0.15"></td><td><input type="number" name="score" value="90"></td></tr>
+      <tr><td>ฟิสิกส์</td><td><input type="number" name="weight" step="0.01" value="0.15"></td><td><input type="number" name="score" value="80"></td></tr>
+      <tr><td>เคมี</td><td><input type="number" name="weight" step="0.01" value="0.20"></td><td><input type="number" name="score" value="80"></td></tr>
+      <tr><td>ชีวะ</td><td><input type="number" name="weight" step="0.01" value="0.30"></td><td><input type="number" name="score" value="88"></td></tr>
+      <tr><td>อังกฤษ</td><td><input type="number" name="weight" step="0.01" value="0.10"></td><td><input type="number" name="score" value="60"></td></tr>
+      <tr><td>ไทย</td><td><input type="number" name="weight" step="0.01" value="0.10"></td><td><input type="number" name="score" value="80"></td></tr>
+    </table>
+    <br>
+    <button type="submit">คำนวณ</button>
+  </form>
+  <div class="result" id="result" style="margin-top: 20px;"></div>
+  <script>
+    const form = document.getElementById('scoreForm');
+    const resultDiv = document.getElementById('result');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const weights = [...form.querySelectorAll('input[name="weight"]')].map(i => parseFloat(i.value));
+      const scores = [...form.querySelectorAll('input[name="score"]')].map(i => parseFloat(i.value));
+      let totalWeighted = 0, totalWeight = 0;
+      for (let i = 0; i < weights.length; i++) {
+        totalWeighted += weights[i] * scores[i];
+        totalWeight += weights[i];
+      }
+      let msg = `คะแนนรวมถ่วงน้ำหนัก: <strong>${totalWeighted.toFixed(2)}</strong><br>`;
+      msg += `น้ำหนักรวม: <strong>${totalWeight.toFixed(2)}</strong>`;
+      if (totalWeight !== 1) {
+        msg += `<br><span style="color:red">น้ำหนักรวมควรเท่ากับ 1</span>`;
+      }
+      resultDiv.innerHTML = msg;
+    });
+  </script>
+</body>
+</html>
